@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="es" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Probando json</title>
+  <link rel="stylesheet" href="estilo.css">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+</head>
+  <body>
+    <div class="contenedor">
+      <header>
+        <div class="row">
+          <div class="col-9">
+            <h1>TGIF logo</h1>
+          </div>
+          <div class="col-3">
+
+         <img src="icon-msj.png" alt=""><a href="mailto:info@tgif.net">info@tgif.net</a>
+
+
+          </div>
+
+        </div>
+      </header>
+
+      <nav class="navbar navbar-expand-lg navbar-light bg-light border border-dark">
+
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarNav">
+    <ul class="navbar-nav">
+      <li class="nav-item active">
+        <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+      </li>
+
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+         Congress 113
+       </a>
+       <div class="dropdown-menu"  aria-labelledby="navbarDropdownMenuLink">
+         <a class="dropdown-item" data-toggle="dropdown" href="#">House</a>
+         <a class="dropdown-item" href="#">Senate</a>
+
+       </div>
+     </li>
+
+    </ul>
+  </div>
+</nav>
+
+
+    <section class="principal">
+      <div class="row">
+        <div class="col-9">
+          <h1>Senate</h1>
+          <p>First convened in 1789, the composition and powers of the Senate are established in Article One of the U.S. Constitution. Each state is represented by two senators, regardless of population, who serve staggered six-year terms. The Senate has several exclusive powers not granted to the House, including consenting to treaties as a precondition to their ratification and consenting to or confirming appointments of Cabinet secretaries, federal judges, other federal executive officials, military officers, regulatory officials, ambassadors, and other federal uniformed officers, as well as trial of federal officials impeached by the House.</p>
+        </div>
+
+      </div>
+      <div class="row">
+        <div class="col-12">
+          <table class="table table-striped" id="senate-data">
+            <thead id="thead">
+              <tr>
+                <th>Name</th>
+                <th>Party</th>
+                <th>State</th>
+                <th>Years in office</th>
+                <th>% votes in w/ party</th>
+              </tr>
+
+            </thead>
+
+          </table>
+        </div>
+
+      </div>
+
+  </section>
+  <footer class="page-footer font-small bg-light border border-dark pt-2 mt-2">
+   <div class="footer-copyright text-center">
+          <p>© 2016 TGIF| All Rigths Reserved</p>
+   </div>
+  </footer>
+</div>
+
+<script src="pro-congress-113-senate.js" charset="utf-8"></script>
+
+<script type="text/javascript">
+var datos = JSON.parse(JSON.stringify(data,null,2));
+var table = document.getElementById("senate-data");
+var i;
+var row;
+var col;
+for (i=1;i<data.results[0].members.length;i++){
+  row = table.insertRow(i);<!-- i = indice de las filas-->
+  var member = data.results[0].members[i];
+
+  var colName = row.insertCell(0); <!-- indices de la columnas -->
+  var colParty = row.insertCell(1);
+  var colState = row.insertCell(2);
+  var colSeniority = row.insertCell(3);
+  var colPercentage = row.insertCell(4);
+  var urlPage = document.createElement("A");<!-- Creo elemento <a>-->
+  if (member.middle_name !=null){  <!--si tiene segundo nombre-->
+
+  urlPage.innerHTML=member.last_name+" "+member.first_name+" "+member.middle_name;
+  urlPage.href= member.url;
+  colName.appendChild(urlPage);
+}
+else{
+
+  urlPage.innerHTML=member.last_name+" "+member.first_name; <!--Agrego texto al link-->
+  urlPage.href = member.url; <!-- Guardo la direccion url en el link -->
+  colName.appendChild(urlPage);<!-- Agrego el elemento <a> a la columna-->
+}
+  colParty.innerHTML = member.party;
+  colState.innerHTML = member.state;
+  colSeniority.innerHTML = member.seniority;
+  colPercentage.innerHTML = member.votes_with_party_pct+" %";
+
+
+}
+
+
+</script>
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+  </body>
+</html>
