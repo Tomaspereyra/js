@@ -8,21 +8,29 @@
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 </head>
   <body>
-
-      <header>
-        <div class="row">
-          <div class="col-9">
-            <h1>TGIF logo</h1>
-          </div>
-          <div class="col-3">
-
-         <img src="icon-msj.png" alt=""><a href="mailto:info@tgif.net">info@tgif.net</a>
-
-
-          </div>
+  <div class="contenedor">
+    <header>
+      <div class="row">
+        <div class="col-3">
+          <img src="logo-min.png" alt="">
 
         </div>
-      </header>
+        <div class="col-9">
+          <div class="d-flex align-items-end flex-column" style="height:200px;"> <!--flex-row para posiconarlos horizontalmente-->
+            <div class="mt-auto p-2">
+              <img src="icon-msj.png" alt=""><a href="mailto:info@tgif.net">info@tgif.net</a>
+            </div>
+
+          </div>
+
+
+
+
+
+        </div>
+
+      </div>
+    </header>
 
       <nav class="navbar navbar-expand-lg navbar-light bg-light border border-dark">
 
@@ -49,7 +57,7 @@
     </ul>
   </div>
 </nav>
-  <div class="contenedor">
+
 
 
     <section class="principal">
@@ -57,6 +65,19 @@
         <div class="col-9">
           <h1>Senate</h1>
           <p>First convened in 1789, the composition and powers of the Senate are established in Article One of the U.S. Constitution. Each state is represented by two senators, regardless of population, who serve staggered six-year terms. The Senate has several exclusive powers not granted to the House, including consenting to treaties as a precondition to their ratification and consenting to or confirming appointments of Cabinet secretaries, federal judges, other federal executive officials, military officers, regulatory officials, ambassadors, and other federal uniformed officers, as well as trial of federal officials impeached by the House.</p>
+        </div>
+
+      </div>
+      <div class="row">
+        <div class="col-9">
+          <label for="">Filter by Party: </label><input type="checkbox" id="republican" name="partido" class="ml-2" value="R">Republican
+          <input type="checkbox" class="ml-2" id="democrat" name="partido"  value="D">Democrat
+          <input type="checkbox" class="ml-2" id="independent" name="partido" value="I">Independent
+
+        </div>
+        <div class="col-3">
+          <label for="">Filter by State</label>
+
         </div>
 
       </div>
@@ -91,14 +112,15 @@
 <script src="pro-congress-113-senate.js" charset="utf-8"></script>
 
 <script type="text/javascript">
-var datos = JSON.parse(JSON.stringify(data,null,2));
+
+function mostrarTabla(tamano,miembros){
 var table = document.getElementById("senate-data");
 var i;
 var row;
 var col;
-for (i=1;i<data.results[0].members.length;i++){
-  row = table.insertRow(i);<!-- i = indice de las filas-->
-  var member = data.results[0].members[i];
+for (i=0;i<tamano;i++){
+  row = table.insertRow(i+1);<!-- i = indice de las filas-->
+  var member = miembros[i];
 
   var colName = row.insertCell(0); <!-- indices de la columnas -->
   var colParty = row.insertCell(1);
@@ -125,6 +147,59 @@ else{
 
 
 }
+
+}
+var miembros = data.results[0].members;
+mostrarTabla(miembros.length,miembros);
+function limpiarTabla(){
+
+
+  for (var i=0;i<data.results[0].members;i++){
+    document.getElementById("senate-data").deleteRow(i);
+  }
+  console.log("filas:"+document.getElementById("senate-data").rows.length);
+}
+
+function buscarMiembrosPorPartido(miembros,filtro){
+ var encontrados=[];
+
+  for(var i=0;i<miembros.length;i++){
+
+    if(miembros[i].party==filtro){
+      encontrados.push(miembros[i]);
+
+    }
+  }
+  return encontrados;
+
+}
+function buscar(){
+  var checkboxes= document.querySelectorAll('input[name=partido]:checked');
+  var miembrosEncontrados= [];
+  var aux=[];
+  for(var i=0;i<checkboxes.length;i++){
+   aux=aux.concat(buscarMiembrosPorPartido(data.results[0].members,checkboxes[i].defaultValue));
+
+  }
+  //limpiarTabla();
+  mostrarTabla(aux.length,aux);
+
+
+
+}
+
+var checkboxActivos;
+ document.getElementById("independent").addEventListener("click",buscar);
+ document.getElementById("republican").addEventListener("click",buscar);
+ document.getElementById("democrat").addEventListener("click",buscar);
+
+
+
+
+
+
+
+
 
 
 </script>
