@@ -76,14 +76,24 @@
 
         </div>
         <div class="col-3">
-          <label for="">Filter by State</label>
+
+          <div class="dropdown">
+
+            <label for="">Filter by State</label>
+           <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            All</button>
+            <div class="dropdown-menu" style="height:400px; overflow:scroll;" id="estados" aria-labelledby="dropdownMenuButton"><!-- aca cargo los estados con js -->
+              <a type="button" name="estado" class="dropdown-item btn btn-dark" value="ALL">ALL</a>
+
+           </div>
+            </div>
 
         </div>
 
       </div>
-      <div class="row">
+      <div class="row" style="height:600px; overflow:scroll;">
         <div class="col-12">
-          <table class="table table-striped" id="senate-data">
+          <table class="table table-striped" id="data">
             <thead id="thead">
               <tr>
                 <th>Name</th>
@@ -101,108 +111,18 @@
       </div>
 
   </section>
-  </div>
+
   <footer class="page-footer font-small bg-light border border-dark pt-2 mt-2">
    <div class="footer-copyright text-center">
           <p>© 2016 TGIF| All Rigths Reserved</p>
    </div>
   </footer>
+  </div>
 
 
 <script src="pro-congress-113-senate.js" charset="utf-8"></script>
 
-<script type="text/javascript">
-
-function mostrarTabla(tamano,miembros){
-var table = document.getElementById("senate-data");
-var i;
-var row;
-var col;
-for (i=0;i<tamano;i++){
-  row = table.insertRow(i+1);<!-- i = indice de las filas-->
-  var member = miembros[i];
-
-  var colName = row.insertCell(0); <!-- indices de la columnas -->
-  var colParty = row.insertCell(1);
-  var colState = row.insertCell(2);
-  var colSeniority = row.insertCell(3);
-  var colPercentage = row.insertCell(4);
-  var urlPage = document.createElement("A");<!-- Creo elemento <a>-->
-  if (member.middle_name !=null){  <!--si tiene segundo nombre-->
-
-  urlPage.innerHTML=member.last_name+" "+member.first_name+" "+member.middle_name;
-  urlPage.href= member.url;
-  colName.appendChild(urlPage);
-}
-else{
-
-  urlPage.innerHTML=member.last_name+" "+member.first_name; <!--Agrego texto al link-->
-  urlPage.href = member.url; <!-- Guardo la direccion url en el link -->
-  colName.appendChild(urlPage);<!-- Agrego el elemento <a> a la columna-->
-}
-  colParty.innerHTML = member.party;
-  colState.innerHTML = member.state;
-  colSeniority.innerHTML = member.seniority;
-  colPercentage.innerHTML = member.votes_with_party_pct+" %";
-
-
-}
-
-}
-var miembros = data.results[0].members;
-mostrarTabla(miembros.length,miembros);
-function limpiarTabla(){
-
-
-  for (var i=0;i<data.results[0].members;i++){
-    document.getElementById("senate-data").deleteRow(i);
-  }
-  console.log("filas:"+document.getElementById("senate-data").rows.length);
-}
-
-function buscarMiembrosPorPartido(miembros,filtro){
- var encontrados=[];
-
-  for(var i=0;i<miembros.length;i++){
-
-    if(miembros[i].party==filtro){
-      encontrados.push(miembros[i]);
-
-    }
-  }
-  return encontrados;
-
-}
-function buscar(){
-  var checkboxes= document.querySelectorAll('input[name=partido]:checked');
-  var miembrosEncontrados= [];
-  var aux=[];
-  for(var i=0;i<checkboxes.length;i++){
-   aux=aux.concat(buscarMiembrosPorPartido(data.results[0].members,checkboxes[i].defaultValue));
-
-  }
-  //limpiarTabla();
-  mostrarTabla(aux.length,aux);
-
-
-
-}
-
-var checkboxActivos;
- document.getElementById("independent").addEventListener("click",buscar);
- document.getElementById("republican").addEventListener("click",buscar);
- document.getElementById("democrat").addEventListener("click",buscar);
-
-
-
-
-
-
-
-
-
-
-</script>
+<script src="filtros.js" charset="utf-8"></script>
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
