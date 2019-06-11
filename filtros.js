@@ -1,19 +1,20 @@
+
 function mostrarTabla(tamano,miembros){
 var table = document.getElementById("data");
 var i;
 var row;
 var col;
 for (i=0;i<tamano;i++){
-  row = table.insertRow(i+1);<!-- i = indice de las filas-->
+  row = table.insertRow(i+1);//i = indice de las filas
   var member = miembros[i];
 
-  var colName = row.insertCell(0); <!-- indices de la columnas -->
+  var colName = row.insertCell(0); // indices de la columnas
   var colParty = row.insertCell(1);
   var colState = row.insertCell(2);
   var colSeniority = row.insertCell(3);
   var colPercentage = row.insertCell(4);
-  var urlPage = document.createElement("A");<!-- Creo elemento <a>-->
-  if (member.middle_name !=null){  <!--si tiene segundo nombre-->
+  var urlPage = document.createElement("A"); //Creo elemento <a>
+  if (member.middle_name !=null){ //si tiene segundo nombre
 
   urlPage.innerHTML=member.last_name+" "+member.first_name+" "+member.middle_name;
   urlPage.href= member.url;
@@ -21,9 +22,9 @@ for (i=0;i<tamano;i++){
 }
 else{
 
-  urlPage.innerHTML=member.last_name+" "+member.first_name; <!--Agrego texto al link-->
-  urlPage.href = member.url; <!-- Guardo la direccion url en el link -->
-  colName.appendChild(urlPage);<!-- Agrego el elemento <a> a la columna-->
+  urlPage.innerHTML=member.last_name+" "+member.first_name; //Agrego texto al link
+  urlPage.href = member.url; //Guardo la direccion url en el link
+  colName.appendChild(urlPage);// Agrego el elemento <a> a la columna
 }
   colParty.innerHTML = member.party;
   colState.innerHTML = member.state;
@@ -32,10 +33,8 @@ else{
 
 
 }
-
 }
-var miembros = data.results[0].members;
-mostrarTabla(miembros.length,miembros);
+
 function limpiarTabla(){
 var table = document.getElementById("data");
 
@@ -61,25 +60,19 @@ function buscarMiembrosPorPartido(miembros,filtro){
 }
 function buscar(){
   var checkboxes= document.querySelectorAll('input[name=partido]:checked');
-  var aux=[];
+  var aux=data.results[0].members;
   if(checkboxes.length>0){
+    aux=[]; // si se selecciono algun checkbox, vacio el array de miembros
   for(var i=0;i<checkboxes.length;i++){
    aux=aux.concat(buscarMiembrosPorPartido(data.results[0].members,checkboxes[i].defaultValue));
+   //Ahora lo cargo con los partidos seleccionados.
+  }
 
-  }
-  limpiarTabla();
-  mostrarTabla(aux.length,aux);}
-  else {<!-- si no hay checkbox precionados, muestro la tabla original -->
-    mostrarTabla(data.results[0].members.length, data.results[0].members);
-  }
+}
+  app.miembros=aux; // seteo los miembros que tienen que mostrar;
 }
 
-
- document.getElementById("independent").addEventListener("click",buscar);<!-- checkbox de partido -->
- document.getElementById("republican").addEventListener("click",buscar);
- document.getElementById("democrat").addEventListener("click",buscar);
-
-<!-- Aca empieza el ejercicio n°11 filtros por estado -->
+//Aca empieza el ejercicio n°11 filtros por estado -->
 function traerEstados(miembros){
   var estados=[];
   for(var i=0;i<miembros.length;i++){
@@ -94,20 +87,8 @@ function traerEstados(miembros){
 function onlyUnique(value, index, self) {
     return self.indexOf(value) === index;
 }
-var estados = traerEstados(miembros).filter(onlyUnique); <!--eliminar estados repetidos-->
 
-for(var i=0;i<estados.length;i++){<!-- cargo estados en la pag-->
-  var input = document.createElement("A");
-  input.setAttribute("NAME","estado");
-  input.setAttribute("TYPE","button")
-  input.setAttribute("CLASS","dropdown-item btn btn-dark");
-  input.setAttribute("VALUE",estados[i]);
-  input.innerHTML=estados[i];
-  document.getElementById("estados").appendChild(input);
-
-}
-
-function buscarPorEstado(estado){ <!--filtro-->
+function buscarPorEstado(estado){ //filtro
   var miembros = data.results[0].members;
   var encontrados = [];
   for(var i=0;i<miembros.length;i++){
@@ -124,12 +105,12 @@ function buscarPorEstado(estado){ <!--filtro-->
 var estados =document.getElementsByName("estado");
 for(var i=0;i<estados.length;i++){
   estados[i].addEventListener("click",function(){
-    document.getElementById("dropdownMenuButton").innerHTML=this.innerHTML;<!-- muestro el estado cliqueado-->
+    document.getElementById("dropdownMenuButton").innerHTML=this.innerHTML;// muestro el estado cliqueado-->
 
-    if(this.innerHTML!="ALL"){ <!-- si se hace click en un estado,busca-->
+    if(this.innerHTML!="ALL"){ //si se hace click en un estado,busca-->
         buscarPorEstado(this.innerHTML);
     }
-    else{ <!-- si no,muestra tabla original-->
+    else{ // si no,muestra tabla original
         mostrarTabla(data.results[0].members.length, data.results[0].members);
     }
     });

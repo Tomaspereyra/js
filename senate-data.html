@@ -8,7 +8,7 @@
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 </head>
   <body>
-  <div class="contenedor">
+  <div class="conteiner" id="app">
     <header>
       <div class="row">
         <div class="col-3">
@@ -53,6 +53,30 @@
 
        </div>
      </li>
+     <li class="nav-item dropdown">
+       <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownAttendance" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        Attendance
+      </a>
+      <div class="dropdown-menu"  aria-labelledby="navbarDropdownMenuLink">
+        <a class="dropdown-item" href="attendance-house.html">House</a>
+        <a class="dropdown-item" href="attendance-senate.html">Senate</a>
+
+      </div>
+
+
+     </li>
+     <li class="nav-item dropdown">
+       <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownParty" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        Party Loyalty
+      </a>
+      <div class="dropdown-menu"  aria-labelledby="navbarDropdownMenuLink">
+        <a class="dropdown-item" href="">House</a>
+        <a class="dropdown-item" href="">Senate</a>
+
+      </div>
+
+
+     </li>
 
     </ul>
   </div>
@@ -83,8 +107,12 @@
            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             All</button>
             <div class="dropdown-menu" style="height:400px; overflow:scroll;" id="estados" aria-labelledby="dropdownMenuButton"><!-- aca cargo los estados con js -->
-              <a type="button" name="estado" class="dropdown-item btn btn-dark" value="ALL">ALL</a>
-
+               <a type="button" name="estado" class="dropdown-item btn btn-dark" value="ALL">ALL</a>
+               <ul style="list-style:none;">
+              <li v-for="estado in estados">
+                <a type="button" name="estado" class="dropdown-item btn btn-dark" v-bind:["value"]="estado">{{estado}}</a></li>
+              </li>
+              </ul>
            </div>
             </div>
 
@@ -104,6 +132,16 @@
               </tr>
 
             </thead>
+            <tbody>
+              <tr v-for="value in miembros">
+                <td>{{value.first_name}} {{value.middle_name}}{{value.last_name}}</td>
+                <td>{{value.party}}</td>
+                <td>{{value.state}}</td>
+                <td>{{value.seniority}}</td>
+                <td>{{value.votes_with_party_pct}}%</td>
+
+              </tr>
+            </tbody>
 
           </table>
         </div>
@@ -120,9 +158,42 @@
   </div>
 
 
-<script src="pro-congress-113-senate.js" charset="utf-8"></script>
 
 <script src="filtros.js" charset="utf-8"></script>
+<script src="https://cdn.jsdelivr.net/npm/vue"></script>
+
+<script type="text/javascript">
+const url ="https://api.propublica.org/congress/v1/113/senate/members.json";
+let data; // aca voy a cargar el json;
+var app = new Vue({
+  el:'#app',
+  data:{
+    miembros:[],
+    estados:[]
+  }
+});
+
+fetch(url,{
+  method:'GET',
+  headers:{
+    'X-API-Key':'KQcKrS8u50etFZIwwqYL5awbL0rF55usagtY04HA'}
+}).then((response) =>{
+  return response.json();
+}).then((json)=>{
+    console.log(json);
+    data=json;
+    app.miembros = data.results[0].members;
+    document.getElementById("independent").addEventListener("click",buscar);//checkbox de partido
+    document.getElementById("republican").addEventListener("click",buscar);
+    document.getElementById("democrat").addEventListener("click",buscar);
+    app.estados = traerEstados(app.miembros).filter(onlyUnique); //trae los estados, sin repeticiones.
+
+  }).catch((error)=>
+  {console.log("error:"+error);});
+  console.log(app.miembros);
+
+
+</script>
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>

@@ -2,7 +2,7 @@
 <html lang="es" dir="ltr">
   <head>
     <meta charset="utf-8">
-    <title>Attendance</title>
+    <title>Attendance-House</title>
     <link rel="stylesheet" href="estilo.css">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
@@ -57,8 +57,8 @@
         Attendance
       </a>
       <div class="dropdown-menu"  aria-labelledby="navbarDropdownMenuLink">
-        <a class="dropdown-item" href="">House</a>
-        <a class="dropdown-item" href="">Senate</a>
+        <a class="dropdown-item" href="#">House</a>
+        <a class="dropdown-item" href="attendance-senate.html">Senate</a>
 
       </div>
 
@@ -69,8 +69,8 @@
         Party Loyalty
       </a>
       <div class="dropdown-menu"  aria-labelledby="navbarDropdownMenuLink">
-        <a class="dropdown-item" href="">House</a>
-        <a class="dropdown-item" href="">Senate</a>
+        <a class="dropdown-item" href="#">House</a>
+        <a class="dropdown-item" href="party-loyalty-senate.html">Senate</a>
 
       </div>
 
@@ -80,7 +80,7 @@
     </ul>
   </div>
   </nav>
-  <div class="row border-bottom">
+  <div class="row border-bottom mt-3">
     <div class="col-6">
       <h2>Attendance</h2>
       <p class="identado">The Constitution specifies that a majority of members constitutes a quorum to do business in each house. Representatives and senators rarely force the presence of a quorum by demanding quorum calls; thus, in most cases, debates continue even if a majority is not present.</p>
@@ -88,14 +88,98 @@
       <p>The Senate uses roll-call votes; a clerk calls out the names of all the senators, each senator stating "aye" or "no" when his or her name is announced. The House reserves roll-call votes for the most formal matters, as a roll-call of all 435 representatives takes quite some time; normally, members vote by electronic device. In the case of a tie, the motion in question fails. In the Senate, the Vice President may (if present) cast the tiebreaking vote.</p>
 
     </div>
+    <div class="col-6">
+     <h3 class="text-right">House at glance</h3>
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Party</th>
+            <th>No. of reps</th>
+            <th>% voted w/ Party</th>
+
+
+
+
+          </tr>
+        </thead>
+        <tbody id="tablaGeneral">
+
+        </tbody>
+
+      </table>
+
+    </div>
 
   </div>
+  <div class="row mt-3" style="height:500px; overflow:scroll;">
+    <div class="col-6">
+      <h4>Least Engaged (Bottom 10% Attendance)</h4>
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>No. Missed Votes</th>
+            <th>% Missed</th>
+          </tr>
+        </thead>
+        <tbody id="menosVotosPerdidos">
+
+        </tbody>
+      </table>
+    </div>
+      <div class="col-6">
+        <h4>Most Engaged (Top 10% Attendance)</h4>
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>No. Missed Votes</th>
+              <th>% Missed</th>
+            </tr>
+          </thead>
+           <tbody id="masVotosPerdidos" >
+
+           </tbody>
+        </table>
+
+      </div>
+
+    </div>
+
+
   <footer class="page-footer font-small bg-light border border-dark pt-2 mt-2 mb-2">
    <div class="footer-copyright text-center">
           <p>© 2016 TGIF| All Rigths Reserved</p>
    </div>
   </footer>
-    </div>
+</div>
+<script src="estadisticas.js" charset="utf-8"></script>
+<script type="text/javascript">
+const url ="https://api.propublica.org/congress/v1/113/house/members.json";
+let data;  //aca se carga el json;
+fetch(url,{
+  method:'GET',
+  mode:'cors',
+  headers:{
+    'X-API-Key':'KQcKrS8u50etFZIwwqYL5awbL0rF55usagtY04HA'
+  }
+
+}).then(function(response){
+  return response.json();
+}).then((json) => {
+  console.log(json);
+  data = json;
+  estadisticas(); //calculo las estadisticas aca, esperando los datos, no se si es lo mejor.
+  cargarTablaVotosPerdidos("menosVotosPerdidos",statistics.menosVotosPerdidos);
+  cargarTablaVotosPerdidos("masVotosPerdidos",statistics.masVotosPerdidos);
+
+}).catch(function(error){
+  console.log("Error: "+error.message);
+});
+</script>
+
+
+
 
         <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
