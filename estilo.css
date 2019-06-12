@@ -35,3 +35,9 @@ header{
 .identado{
   text-indent: 30px;
 }
+.boton:active{
+  color:blue;
+}
+.boton:hover{
+  background: black;
+}

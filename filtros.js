@@ -58,20 +58,6 @@ function buscarMiembrosPorPartido(miembros,filtro){
   return encontrados;
 
 }
-function buscar(){
-  var checkboxes= document.querySelectorAll('input[name=partido]:checked');
-  var aux=data.results[0].members;
-  if(checkboxes.length>0){
-    aux=[]; // si se selecciono algun checkbox, vacio el array de miembros
-  for(var i=0;i<checkboxes.length;i++){
-   aux=aux.concat(buscarMiembrosPorPartido(data.results[0].members,checkboxes[i].defaultValue));
-   //Ahora lo cargo con los partidos seleccionados.
-  }
-
-}
-  app.miembros=aux; // seteo los miembros que tienen que mostrar;
-}
-
 //Aca empieza el ejercicio n°11 filtros por estado -->
 function traerEstados(miembros){
   var estados=[];
@@ -96,22 +82,6 @@ function buscarPorEstado(estado){ //filtro
       encontrados.push(miembros[i]);
     }
   }
+  return encontrados;
 
-  limpiarTabla();
-  mostrarTabla(encontrados.length,encontrados);
-
-}
-
-var estados =document.getElementsByName("estado");
-for(var i=0;i<estados.length;i++){
-  estados[i].addEventListener("click",function(){
-    document.getElementById("dropdownMenuButton").innerHTML=this.innerHTML;// muestro el estado cliqueado-->
-
-    if(this.innerHTML!="ALL"){ //si se hace click en un estado,busca-->
-        buscarPorEstado(this.innerHTML);
-    }
-    else{ // si no,muestra tabla original
-        mostrarTabla(data.results[0].members.length, data.results[0].members);
-    }
-    });
 }
