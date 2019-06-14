@@ -97,14 +97,14 @@
         <div class="col-9">
 
           <label for="">Filter by Party: </label>
-          <label for="republican" class="btn btn-secondary boton" type="checkbox" v-on:click="filtrarPartido('republican')">
+          <label for="republican" class="btn btn-secondary boton" type="checkbox" v-on:click="filtrarPartido()">
             <input type="checkbox" id="republican" name="partido" class="ml-2 " value="R">Republican
           </label>
-          <label for="democrat" class="btn btn-secondary boton" v-on:click="filtrarPartido('democrat')">
-            <input type="checkbox" class="ml-2 " id="democrat" name="partido" value="D">
+          <label for="democrat" class="btn btn-secondary boton" v-on:click="filtrarPartido()">
+            <input type="checkbox" class="ml-2" id="democrat" name="partido" value="D">
             Democrat
           </label>
-          <label for="independent" class="btn btn-secondary boton" v-on:click="filtrarPartido('independent')">
+          <label for="independent" class="btn btn-secondary boton" v-on:click="filtrarPartido()">
             <input type="checkbox" class="ml-2 " id="independent" name="partido" value="I">
             Independent
           </label>
@@ -117,15 +117,14 @@
             <label for="">Filter by State</label>
            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             All</button>
-            <div class="dropdown-menu" style="height:400px; overflow:scroll;" id="estados" aria-labelledby="dropdownMenuButton"><!-- aca cargo los estados con js -->
 
-               <ul style="list-style:none;">
+               <ul class="dropdown-menu" style="height:400px; overflow:scroll;list-style:none" id="estados" aria-labelledby="dropdownMenuButton">
                  <li><a type="button" name="estado" class="dropdown-item btn btn-dark" v-on:click="filtrarEstado('ALL')" value="ALL">ALL</a></li>
-              <li v-for="estado in estados">
+              <li v-for="estado in estados" >
                 <a type="button" name="estado" class="dropdown-item btn btn-dark" v-bind:ref='estado' v-on:click="filtrarEstado(estado)" v-bind:["value"]="estado" >{{estado}}</a></li>
               </li>
               </ul>
-           </div>
+
             </div>
 
         </div>
@@ -173,7 +172,6 @@
 
 <script src="filtros.js" charset="utf-8"></script>
 <script src="https://cdn.jsdelivr.net/npm/vue"></script>
-
 <script type="text/javascript">
 const url ="https://api.propublica.org/congress/v1/113/senate/members.json";
 let data; // aca voy a cargar el json;
@@ -185,7 +183,6 @@ var app = new Vue({
   },
   methods:{
     filtrarEstado(estado){
-      console.log(estado);
       document.getElementById("dropdownMenuButton").innerHTML=estado;
       if(estado!="ALL"){ //si se hace click en un estado,busca-->
           app.miembros=buscarPorEstado(estado);
@@ -194,10 +191,8 @@ var app = new Vue({
         app.miembros=data.results[0].members;
       }
     },
-    filtrarPartido(id){
-      console.log(document.getElementById(id));
+    filtrarPartido(){
      let checkboxes= document.querySelectorAll('input[name=partido]:checked');
-    console.log(checkboxes);
      let aux=data.results[0].members;
      if(checkboxes.length>0){
        aux=[]; // si se selecciono algun checkbox, vacio el array de miembros
@@ -205,18 +200,14 @@ var app = new Vue({
       aux=aux.concat(buscarMiembrosPorPartido(data.results[0].members,checkboxes[i].defaultValue));
       //Ahora lo cargo con los partidos seleccionados.
      }
-
-   }
-     app.miembros=aux; // seteo los miembros que tienen que mostrar;
-
-
     }
+     app.miembros=aux; // seteo los miembros que tienen que mostrar;
+   }
   }
 });
 
 fetch(url,{
   method:'GET',
-  //mode: 'no-cors',
   headers:{
     'X-API-Key':'KQcKrS8u50etFZIwwqYL5awbL0rF55usagtY04HA'}
 }).then((response) =>{
