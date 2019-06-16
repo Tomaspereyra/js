@@ -202,14 +202,9 @@ fetch(url,{
   app.masVotosPerdidos=statistics.masVotosPerdidos; //cargo los datos para mostrar
   app.menosVotosPerdidos=statistics.menosVotosPerdidos;
   app.tablaGeneral=statistics.partidos;
-  console.log(app.tablaGeneral);
 }).catch(function(error){
   console.log("Error: "+error.message);
 });
-
-
-cargarTablaVotosPerdidos("menosVotosPerdidos",statistics.menosVotosPerdidos);
-cargarTablaVotosPerdidos("masVotosPerdidos",statistics.masVotosPerdidos);
 
 </script>
 

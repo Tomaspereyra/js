@@ -28,7 +28,6 @@ function porcentaje(array){
 
 statistics.partidos[0].pctVotos=porcentaje(democratas);
 statistics.partidos[1].pctVotos=porcentaje(republicanos);
-console.log(JSON.stringify(statistics));
 // ejercicio 4
 function ordenaMenor(a,b){
   let comparacion=0;

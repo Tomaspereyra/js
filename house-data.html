@@ -8,7 +8,7 @@
 
   </head>
   <body>
-    <div class="contenedor">
+    <div class="conteiner" id="app">
       <header>
         <div class="row">
           <div class="col-3">
@@ -52,6 +52,30 @@
 
        </div>
      </li>
+     <li class="nav-item dropdown">
+       <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownAttendance" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        Attendance
+      </a>
+      <div class="dropdown-menu"  aria-labelledby="navbarDropdownMenuLink">
+        <a class="dropdown-item" href="attendance-house.html">House</a>
+        <a class="dropdown-item" href="attendance-senate.html">Senate</a>
+
+      </div>
+
+
+     </li>
+     <li class="nav-item dropdown">
+       <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownParty" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        Party Loyalty
+      </a>
+      <div class="dropdown-menu"  aria-labelledby="navbarDropdownMenuLink">
+        <a class="dropdown-item" href="party-loyalty-house.html">House</a>
+        <a class="dropdown-item" href="party-loyalty-senate.html">Senate</a>
+
+      </div>
+
+
+     </li>
 
     </ul>
   </div>
@@ -68,10 +92,18 @@
   </div>
   <div class="row">
     <div class="col-9">
-      <label for="">Filter by Party: </label><input type="checkbox" id="republican" name="partido" class="ml-2" value="R">Republican
-      <input type="checkbox" class="ml-2" id="democrat" name="partido"  value="D">Democrat
-      <input type="checkbox" class="ml-2" id="independent" name="partido" value="I">Independent
-
+      <label for="">Filter by Party: </label>
+      <label for="republican" class="btn btn-secondary boton" type="checkbox" v-on:click="filtrarPartido()">
+        <input type="checkbox" id="republican" name="partido" class="ml-2 " value="R">Republican
+      </label>
+      <label for="democrat" class="btn btn-secondary boton" v-on:click="filtrarPartido()">
+        <input type="checkbox" class="ml-2" id="democrat" name="partido" value="D">
+        Democrat
+      </label>
+      <label for="independent" class="btn btn-secondary boton" v-on:click="filtrarPartido()">
+        <input type="checkbox" class="ml-2 " id="independent" name="partido" value="I">
+        Independent
+      </label>
     </div>
     <div class="col-3">
 
@@ -80,10 +112,13 @@
         <label for="">Filter by State</label>
        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
         All</button>
-        <div class="dropdown-menu" style="height:400px; overflow:scroll;" id="estados" aria-labelledby="dropdownMenuButton"><!-- aca cargo los estados con js -->
-          <a type="button" name="estado" class="dropdown-item btn btn-dark" value="ALL">ALL</a>
 
-       </div>
+        <ul class="dropdown-menu" style="height:400px; overflow:scroll;list-style:none" id="estados" aria-labelledby="dropdownMenuButton">
+           <li><a type="button" name="estado" class="dropdown-item btn btn-dark" v-on:click="filtrarEstado('ALL')" value="ALL">ALL</a></li>
+          <li v-for="estado in estados" >
+            <a type="button" name="estado" class="dropdown-item btn btn-dark" v-bind:ref='estado' v-on:click="filtrarEstado(estado)" v-bind:["value"]="estado" >{{estado}}</a></li>
+          </li>
+        </ul>
         </div>
 
     </div>
@@ -100,6 +135,14 @@
      <th>% Votes w/ Party</th>
       </thead>
       <tbody>
+        <tr v-for="value in miembros">
+          <td>{{value.first_name}} {{value.middle_name}}{{value.last_name}}</td>
+          <td>{{value.party}}</td>
+          <td>{{value.state}}</td>
+          <td>{{value.seniority}}</td>
+          <td>{{value.votes_with_party_pct}}%</td>
+
+        </tr>
 
       </tbody>
 
@@ -117,8 +160,58 @@
 </footer>
 
     </div>
-    <script src="pro-congress-113-house.js" charset="utf-8"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+
     <script src="filtros.js" charset="utf-8"></script>
+    <script type="text/javascript">
+    const url ="https://api.propublica.org/congress/v1/113/house/members.json";
+    let data;  //aca se carga el json;
+    var app = new Vue({
+      el:'#app',
+      data:{
+        miembros:[],
+        estados:[]
+      },
+      methods:{
+        filtrarEstado(estado){
+          document.getElementById("dropdownMenuButton").innerHTML=estado;
+          if(estado!="ALL"){ //si se hace click en un estado,busca-->
+              app.miembros=buscarPorEstado(estado);
+          }
+          else{ //muestro todo;
+            app.miembros=data.results[0].members;
+          }
+        },
+        filtrarPartido(){
+         let checkboxes= document.querySelectorAll('input[name=partido]:checked');
+         let aux=data.results[0].members;
+         if(checkboxes.length>0){
+           aux=[]; // si se selecciono algun checkbox, vacio el array de miembros
+         for(var i=0;i<checkboxes.length;i++){
+          aux=aux.concat(buscarMiembrosPorPartido(data.results[0].members,checkboxes[i].defaultValue));
+          //Ahora lo cargo con los partidos seleccionados.
+         }
+        }
+         app.miembros=aux; // seteo los miembros que tienen que mostrar;
+       }
+      }
+    });
+    fetch(url,{
+      method:'GET',
+      headers:{
+        'X-API-Key':'KQcKrS8u50etFZIwwqYL5awbL0rF55usagtY04HA'}
+    }).then((response) =>{
+      return response.json();
+    }).then((json)=>{
+        console.log(json);
+        data=json;
+        app.miembros = data.results[0].members;
+        app.estados = traerEstados(app.miembros).filter(onlyUnique); //trae los estados, sin repeticiones.
+      }).catch((error)=>
+      {console.log("error:"+error);});
+
+
+    </script>
 
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>

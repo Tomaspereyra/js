@@ -8,7 +8,7 @@
 
   </head>
   <body>
-    <div class="contenedor">
+    <div class="container" id="app">
       <header>
         <div class="row">
           <div class="col-3">
@@ -103,6 +103,12 @@
           </tr>
         </thead>
         <tbody id="tablaGeneral">
+          <tr v-for="miembro in tablaGeneral">
+            <td>{{miembro.partido}}</td>
+            <td>{{miembro.numeroDeRepresentantes}}</td>
+            <td>{{miembro.pctVotos}}</td>
+
+          </tr>
 
         </tbody>
 
@@ -123,6 +129,13 @@
           </tr>
         </thead>
         <tbody id="menosVotosPerdidos">
+          <tr v-for="miembro in menosVotosPerdidos">
+            <td>{{miembro.first_name}} {{miembro.last_name}}</td>
+            <td>{{miembro.missed_votes}}</td>
+            <td>{{miembro.missed_votes_pct}}</td>
+
+
+          </tr>
 
         </tbody>
       </table>
@@ -138,6 +151,12 @@
             </tr>
           </thead>
            <tbody id="masVotosPerdidos" >
+             <tr v-for="miembro in masVotosPerdidos">
+              <td>{{miembro.first_name}} {{miembro.last_name}}</td>
+              <td>{{miembro.missed_votes}}</td>
+              <td>{{miembro.missed_votes_pct}}</td>
+
+             </tr>
 
            </tbody>
         </table>
@@ -154,9 +173,19 @@
   </footer>
 </div>
 <script src="estadisticas.js" charset="utf-8"></script>
+<script src="https://cdn.jsdelivr.net/npm/vue"></script>
+
 <script type="text/javascript">
 const url ="https://api.propublica.org/congress/v1/113/house/members.json";
 let data;  //aca se carga el json;
+let app = new  Vue({
+  el:'#app',
+  data:{
+  menosVotosPerdidos:[],
+  masVotosPerdidos:[],
+  tablaGeneral:[]
+}
+  });
 fetch(url,{
   method:'GET',
   mode:'cors',
@@ -170,8 +199,9 @@ fetch(url,{
   console.log(json);
   data = json;
   estadisticas(); //calculo las estadisticas aca, esperando los datos, no se si es lo mejor.
-  cargarTablaVotosPerdidos("menosVotosPerdidos",statistics.menosVotosPerdidos);
-  cargarTablaVotosPerdidos("masVotosPerdidos",statistics.masVotosPerdidos);
+  app.menosVotosPerdidos = statistics.menosVotosPerdidos;
+  app.masVotosPerdidos = statistics.masVotosPerdidos;
+  app.tablaGeneral=statistics.partidos;
 
 }).catch(function(error){
   console.log("Error: "+error.message);
