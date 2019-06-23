@@ -1,7 +1,36 @@
 var statistics ={partidos:[{partido:"Democrats",numeroDeRepresentantes:0,pctVotos:0},
 {partido:"Republicans",numeroDeRepresentantes:0,pctVotos:0},{partido:"Independents",numeroDeRepresentantes:0,pctVotos:0}],
 masLeales:[],menosLeales:[],masVotosPerdidos:[],menosVotosPerdidos:[]};
+function fetchJSON(url){
+  let app = new Vue({
+    el:'#app',
+    data:{
+      masLeales:[],
+      menosLeales:[],
+      tablaGeneral:[]
+    }
+  })
 
+  fetch(url,{
+    method:'GET',
+    mode:'cors',
+    headers:{
+      'X-API-Key':'KQcKrS8u50etFZIwwqYL5awbL0rF55usagtY04HA'
+    }
+
+  }).then(function(response){
+    return response.json();
+  }).then((json) => {
+    data = json;
+    estadisticas(); //calculo las estadisticas aca, esperando los datos.
+    app.masLeales=statistics.masLeales;
+    app.menosLeales=statistics.menosLeales;
+    app.tablaGeneral=statistics.partidos;
+
+  }).catch(function(error){
+    console.log("Error: "+error.message);
+  });
+}
 
 
 function estadisticas(){

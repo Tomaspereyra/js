@@ -166,49 +166,7 @@
     <script type="text/javascript">
     const url ="https://api.propublica.org/congress/v1/113/house/members.json";
     let data;  //aca se carga el json;
-    var app = new Vue({
-      el:'#app',
-      data:{
-        miembros:[],
-        estados:[]
-      },
-      methods:{
-        filtrarEstado(estado){
-          document.getElementById("dropdownMenuButton").innerHTML=estado;
-          if(estado!="ALL"){ //si se hace click en un estado,busca-->
-              app.miembros=buscarPorEstado(estado);
-          }
-          else{ //muestro todo;
-            app.miembros=data.results[0].members;
-          }
-        },
-        filtrarPartido(){
-         let checkboxes= document.querySelectorAll('input[name=partido]:checked');
-         let aux=data.results[0].members;
-         if(checkboxes.length>0){
-           aux=[]; // si se selecciono algun checkbox, vacio el array de miembros
-         for(var i=0;i<checkboxes.length;i++){
-          aux=aux.concat(buscarMiembrosPorPartido(data.results[0].members,checkboxes[i].defaultValue));
-          //Ahora lo cargo con los partidos seleccionados.
-         }
-        }
-         app.miembros=aux; // seteo los miembros que tienen que mostrar;
-       }
-      }
-    });
-    fetch(url,{
-      method:'GET',
-      headers:{
-        'X-API-Key':'KQcKrS8u50etFZIwwqYL5awbL0rF55usagtY04HA'}
-    }).then((response) =>{
-      return response.json();
-    }).then((json)=>{
-        console.log(json);
-        data=json;
-        app.miembros = data.results[0].members;
-        app.estados = traerEstados(app.miembros).filter(onlyUnique); //trae los estados, sin repeticiones.
-      }).catch((error)=>
-      {console.log("error:"+error);});
+    fetchJSON(url); //trae el json y crea el objeto Vue
 
 
     </script>

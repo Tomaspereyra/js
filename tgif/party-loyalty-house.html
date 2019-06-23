@@ -8,7 +8,7 @@
 
   </head>
   <body>
-    <div class="contenedor">
+    <div class="conteiner" id="app">
       <header>
         <div class="row">
           <div class="col-3">
@@ -90,8 +90,8 @@
     <div class="col-6">
       <h3 class="text-right">House at glance</h3>
 
-      <table class="table">
-        <thead>
+      <table class="table table-hover">
+        <thead class="">
           <tr>
             <th>Party</th>
             <th>No. of reps</th>
@@ -102,6 +102,12 @@
 
           </tr>
           <tbody id="tablaGeneral">
+            <tr v-for="item in tablaGeneral">
+              <td>{{item.partido}}</td>
+              <td>{{item.numeroDeRepresentantes}}</td>
+              <td>{{item.pctVotos}}</td>
+
+            </tr>
 
           </tbody>
         </thead>
@@ -111,11 +117,11 @@
     </div>
 
   </div>
-  <div class="row mt-3" style="height:500px; overflow:scroll;">
-    <div class="col-6">
+  <div class="row mt-3 mb-6" style="height:500px;">
+    <div class="col-6" style="height:500px; overflow:scroll;">
       <h4>Least Loyal (Bottom 10% of Party)</h4>
-      <table class="table">
-        <thead>
+      <table class="table table-striped">
+        <thead class="thead-dark">
           <tr>
             <th>Name</th>
             <th>No. Party Votes</th>
@@ -123,14 +129,19 @@
           </tr>
         </thead>
         <tbody id="menosLeales">
+          <tr v-for="miembro in menosLeales">
+            <td>{{miembro.first_name}} {{miembro.last_name}}</td>
+            <td>{{miembro.total_votes}}</td>
+            <td>{{miembro.votes_with_party_pct}}</td>
+
 
         </tbody>
       </table>
     </div>
-      <div class="col-6">
+      <div class="col-6" style="height:500px; overflow:scroll;">
         <h4>Most Loyal (Top 10% Attendance)</h4>
-        <table class="table">
-          <thead>
+        <table class="table table-striped">
+          <thead class="thead-dark">
             <tr>
               <th>Name</th>
               <th>No. Party Votes</th>
@@ -138,6 +149,12 @@
             </tr>
           </thead>
           <tbody id="masLeales">
+            <tr v-for="miembro in masLeales">
+              <td>{{miembro.first_name}}{{miembro.last_name}}</td>
+              <td>{{miembro.total_votes}}</td>
+              <td>{{miembro.votes_with_party_pct}}</td>
+
+            </tr>
 
           </tbody>
 
@@ -147,37 +164,23 @@
 
     </div>
 
-
-  <footer class="page-footer font-small bg-light border border-dark pt-2 mt-2 mb-2">
-   <div class="footer-copyright text-center">
-          <p>© 2016 TGIF| All Rigths Reserved</p>
-   </div>
-  </footer>
+<div class="row mt-3">
+  <div class="col-12">
+    <footer class="page-footer font-small bg-light border border-dark pt-2 mt-2 mb-2">
+     <div class="footer-copyright text-center">
+            <p>© 2016 TGIF| All Rigths Reserved</p>
+     </div>
+    </footer>
+  </div>
 </div>
 
+</div>
+<script src="https://cdn.jsdelivr.net/npm/vue"></script>
 <script src="estadisticas.js" charset="utf-8"></script>
 <script type="text/javascript">
 const url ="https://api.propublica.org/congress/v1/113/house/members.json";
 let data;  //aca se carga el json;
-fetch(url,{
-  method:'GET',
-  mode:'cors',
-  headers:{
-    'X-API-Key':'KQcKrS8u50etFZIwwqYL5awbL0rF55usagtY04HA'
-  }
-
-}).then(function(response){
-  return response.json();
-}).then((json) => {
-  console.log(json);
-  data = json;
-  estadisticas(); //calculo las estadisticas aca, esperando los datos, no se si es lo mejor.
-  cargarTablaVotosPerdidos("menosVotosPerdidos",statistics.menosVotosPerdidos);
-  cargarTablaVotosPerdidos("masVotosPerdidos",statistics.masVotosPerdidos);
-
-}).catch(function(error){
-  console.log("Error: "+error.message);
-});
+fetchJSON(url);
 </script>
 
 

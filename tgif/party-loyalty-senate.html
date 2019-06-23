@@ -8,7 +8,7 @@
 
   </head>
   <body>
-    <div class="contenedor">
+    <div class="conteiner" id="app">
       <header>
         <div class="row">
           <div class="col-3">
@@ -96,12 +96,14 @@
             <th>Party</th>
             <th>No. of reps</th>
             <th>% voted w/ Party</th>
-
-
-
-
           </tr>
           <tbody id="tablaGeneral">
+            <tr v-for="item in tablaGeneral">
+              <td>{{item.partido}}</td>
+              <td>{{item.numeroDeRepresentantes}}</td>
+              <td>{{item.pctVotos}}</td>
+
+            </tr>
 
           </tbody>
         </thead>
@@ -111,11 +113,11 @@
     </div>
 
   </div>
-  <div class="row mt-3" style="height:500px; overflow:scroll;">
-    <div class="col-6">
+  <div class="row mt-3">
+    <div class="col-6" style="height:500px; overflow:scroll;">
       <h4>Least Loyal (Bottom 10% of Party)</h4>
-      <table class="table">
-        <thead>
+      <table class="table  table-striped">
+        <thead class="thead-dark">
           <tr>
             <th>Name</th>
             <th>No. Party Votes</th>
@@ -123,14 +125,20 @@
           </tr>
         </thead>
         <tbody id="menosLeales">
+          <tr v-for="miembro in menosLeales">
+            <td>{{miembro.first_name}} {{miembro.last_name}}</td>
+            <td>{{miembro.total_votes}}</td>
+            <td>{{miembro.votes_with_party_pct}}</td>
 
+
+          </tbody>
         </tbody>
       </table>
     </div>
-      <div class="col-6">
+      <div class="col-6" style="height:500px; overflow:scroll;">
         <h4>Most Loyal (Top 10% Attendance)</h4>
-        <table class="table">
-          <thead>
+        <table class="table  table-striped">
+          <thead class="thead-dark">
             <tr>
               <th>Name</th>
               <th>No. Party Votes</th>
@@ -138,7 +146,12 @@
             </tr>
           </thead>
           <tbody id="masLeales">
+            <tr v-for="miembro in masLeales">
+              <td>{{miembro.first_name}}{{miembro.last_name}}</td>
+              <td>{{miembro.total_votes}}</td>
+              <td>{{miembro.votes_with_party_pct}}</td>
 
+            </tr>
           </tbody>
 
         </table>
@@ -155,30 +168,12 @@
   </footer>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/vue"></script>
-<!--<script src="pro-congress-113-senate.js" charset="utf-8"></script>-->
 <script src="estadisticas.js" charset="utf-8"></script>
 <script type="text/javascript">
 const url ="https://api.propublica.org/congress/v1/113/senate/members.json";
 let data;  //aca se va a cargar el json;
-fetch(url,{
-  method:'GET',
-  mode:'cors',
-  headers:{
-    'X-API-Key':'KQcKrS8u50etFZIwwqYL5awbL0rF55usagtY04HA'
-  }
+fetchJSON(url);
 
-}).then(function(response){
-  return response.json();
-}).then((json) => {
-  console.log(json);
-  data = json;
-  estadisticas(); //calculo las estadisticas aca, esperando los datos.
-  cargarTablaLeales("masLeales",statistics.masLeales);
-  cargarTablaLeales("menosLeales",statistics.menosLeales);
-
-}).catch(function(error){
-  console.log("Error: "+error.message);
-});
 
 </script>
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
