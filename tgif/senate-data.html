@@ -6,6 +6,7 @@
     <title>Senate</title>
   <link rel="stylesheet" href="estilo.css">
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <script src="https://cdn.rawgit.com/janl/mustache.js/master/mustache.min.js"></script>
 
 </head>
   <body>
@@ -73,6 +74,16 @@
       <div class="dropdown-menu"  aria-labelledby="navbarDropdownMenuLink">
         <a class="dropdown-item" href="party-loyalty-house.html">House</a>
         <a class="dropdown-item" href="party-loyalty-senate.html">Senate</a>
+
+      </div>
+
+
+     </li>
+     <li class="nav-item dropdown">
+       <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownStates" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        State Legislators
+      </a>
+      <div class="dropdown-menu" style="height:400px; overflow:scroll;"  aria-labelledby="navbarDropdownMenuStates" id="states">
 
       </div>
 
@@ -158,6 +169,9 @@
         </div>
 
       </div>
+      <div class="row" id="test">
+      <h1>prueba</h1>
+      </div>
 
   </section>
 
@@ -168,10 +182,31 @@
   </footer>
   </div>
 
-
-
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+  <script src="states.js" charset="utf-8"></script>
 <script src="filtros.js" charset="utf-8"></script>
 <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+<script type="text/html" id="template">
+  {{#data.jurisdictions.edges}}
+  <a class="dropdown-item">
+    {{node.name}}
+  </a>
+  {{/data.jurisdictions.edges}}
+
+</script>
+<script type="text/javascript">
+let states  = document.getElementById("states");
+
+let template = document.getElementById("template").innerHTML;
+let html = Mustache.render(template,statesJSON);
+let node = document.createElement("A");
+let text = document.createTextNode(html);
+//node.appendChild(text);
+//states.appendChild(html);
+states.innerHTML=html;
+
+
+</script>
 <script type="text/javascript">
 const url ="https://api.propublica.org/congress/v1/113/senate/members.json";
 let data; // aca voy a cargar el json;
